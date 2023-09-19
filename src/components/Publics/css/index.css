@@ -582,3 +582,17 @@ input[type=password] {
 .password-correct.active{
     display: block;
 }
+
+#waring-code{
+    display: none;
+}
+
+#waring-code p{
+    color: red;
+    font-size: 14px;
+    margin: 0;
+}
+
+#waring-code.active{
+    display: block;
+}

